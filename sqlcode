@@ -1,0 +1,53 @@
+-- =====================================================
+-- EMPLOYEE MANAGEMENT SYSTEM - DATABASE SETUP
+-- Run this entire script in MySQL Workbench or phpMyAdmin
+-- =====================================================
+
+-- Step 1: Create the database (if it doesn't exist)
+CREATE DATABASE IF NOT EXISTS employee_db;
+USE employee_db;
+
+-- Step 2: Drop existing table (if you want fresh start)
+-- WARNING: This will delete all existing data!
+DROP TABLE IF EXISTS employees;
+
+-- Step 3: Create employees table
+CREATE TABLE employees (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL,
+    department VARCHAR(50) NOT NULL,
+    salary DECIMAL(10, 2) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    phone VARCHAR(20),
+    hire_date DATE,
+    position VARCHAR(50),
+    status VARCHAR(20) DEFAULT 'Active',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Step 4: Insert sample data (for testing)
+INSERT INTO employees (name, department, salary, email, phone, hire_date, position, status) VALUES
+('John Smith', 'IT', 75000.00, 'john.smith@company.com', '555-0101', '2023-01-15', 'Senior Developer', 'Active'),
+('Sarah Johnson', 'Marketing', 65000.00, 'sarah.j@company.com', '555-0102', '2023-02-20', 'Marketing Manager', 'Active'),
+('Mike Brown', 'Sales', 58000.00, 'mike.brown@company.com', '555-0103', '2023-03-10', 'Sales Representative', 'Active'),
+('Lisa Davis', 'HR', 62000.00, 'lisa.davis@company.com', '555-0104', '2023-04-05', 'HR Specialist', 'Active'),
+('David Wilson', 'IT', 85000.00, 'david.wilson@company.com', '555-0105', '2023-05-12', 'Tech Lead', 'Active'),
+('Emily Chen', 'Finance', 70000.00, 'emily.chen@company.com', '555-0106', '2023-06-18', 'Financial Analyst', 'Active'),
+('Robert Taylor', 'Operations', 68000.00, 'robert.taylor@company.com', '555-0107', '2023-07-22', 'Operations Manager', 'Inactive'),
+('Amanda White', 'IT', 72000.00, 'amanda.white@company.com', '555-0108', '2023-08-30', 'Database Administrator', 'Active');
+
+-- Step 5: Verify data was inserted
+SELECT * FROM employees;
+
+-- Step 6: Useful queries for testing
+-- Count employees by department
+SELECT department, COUNT(*) as count FROM employees GROUP BY department;
+
+-- Average salary by department
+SELECT department, AVG(salary) as avg_salary FROM employees GROUP BY department;
+
+-- Active employees only
+SELECT * FROM employees WHERE status = 'Active';
+
+-- Employees hired in 2023
+SELECT * FROM employees WHERE YEAR(hire_date) = 2023;
