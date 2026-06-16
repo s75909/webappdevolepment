@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit this template
+-->
+<html>
+    <head>
+        <title>Calculate Car Loan</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <h1>Perform Car Loan Calculation</h1>
+        <form id="carLoan" action="processCalculateCarLoan.jsp" method="post">
+            <fieldset>
+                
+             <legend>Loan Calculation</legend>
+             
+             <label for="loanAmount">Loan Amount *</label>
+             <input type="text" id="loanAmount" name="my_loan" size="15"
+             placeholder="Amount"><br/>
+             
+             <label for="loanPeriod">Period</label>
+             <input type="text" id="loanPeriod" name="my_loanperiod" size="15"
+                     placeholder="Years"><br/>
+             
+             <p>
+                <input type="submit" id="btnSubmit" value="Submit">
+                <input type="reset" id="btnCancel" value="Cancel">
+            </p>
+            
+            </fieldset>
+        </form>
+        
+        &copy;2026-Dini
+        
+    </body>
+</html>

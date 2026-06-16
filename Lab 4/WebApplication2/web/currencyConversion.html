@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit this template
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="css.css">
+    </head>
+    <body>
+        <div>Use JSP Declaration Tag, JSP Scriplet and JSP 
+        expression in Application</div>
+        
+        
+        <fieldset>
+            <form action="processCurrency.jsp" method="post">
+                <h1>Currency Conversion</h1><br>
+            
+            <label>Amount in (RM)</label><br>
+            <input type="number" name="amount" placeholder="[in RM]" required><br><br>
+            
+            <label>Convert to</label><br>
+            <select name="currency" id="currency">
+                <option value="1">USD</option>
+                <option value="2">EURO</option>
+                <option value="3">JPY</option>
+                <option value="4">SGD</option>
+            </select><br><br>
+            
+            <button type="submit" value="submit">Submit</button>
+            <button type="reset" value="cancel">Cancel</button>
+            
+            </form>  
+        </fieldset>
+    </body>
+</html>

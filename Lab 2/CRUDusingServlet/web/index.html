@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit this template
+-->
+<html>
+    <head>
+        <title>User Registration</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <h2>Register New User</h2>
+
+        <form action="InsertServlet" method="post">
+
+       
+        <label>Username:</label><br>
+        <input type="text" name="username" required><br><br>
+
+       
+        <label>Password:</label><br>
+        <input type="password" name="password" required><br><br>
+
+        
+        <label>Role:</label><br>
+        <select name="roles">
+            <option value="admin">Admin</option>
+            <option value="user">User</option>
+        </select><br><br>
+
+        <input type="submit" value="Submit">
+        
+    </form>
+    </body>
+</html>

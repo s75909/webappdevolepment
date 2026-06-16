@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit this template
+-->
+<html>
+    <head>
+        <title>Customer Discount</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="css.css">
+    </head>
+    <body>
+        <h1> Use JSP Scriptle and JSP Expression in Application </h1>
+        
+        <h2> Customer Discount</h2>
+        
+        <fieldset>
+        <form action="processCustomer.jsp" method="post">
+            
+            <label> Customer Code </label><br>
+            <input type="text" name="customerCode" placeholder="Key-in customer code" required><br><br>
+                    
+            <label> Quantity </label><br>
+            <input type="number" name="quantity"  placeholder="Key-in quantity" required><br><br>
+       
+        
+      <label>Customer Type</label><br>
+
+        <input type="radio" name="customerType" value="1">
+        <label>Normal Customer</label>
+
+        <input type="radio" name="customerType" value="2">
+        <label>Privileged Customer</label><br><br>
+        
+        <button type="submit" value="submit">Submit</button>
+        <button type="reset" value="submit">Cancel</button>
+        
+        </form>
+        </fieldset>
+    </body>
+</html>
