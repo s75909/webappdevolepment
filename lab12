@@ -211,3 +211,44 @@ schedule.jsp
 </body>
 </html>
 
+header.jsp
+<div style="background-color:lightblue; padding:10px;">
+    <h1>DriveSmart Academy</h1>
+</div>
+
+
+
+
+footer.jsp
+<div style="background-color:lightgray; padding:10px;">
+    Current Server Time: <%= new java.util.Date() %>
+</div>
+
+
+
+
+
+
+index.jsp
+<%@ include file="header.html" %>
+<h2>Welcome to DriveSmart</h2>
+<a href="book_session.jsp">Book a Session</a> | 
+<a href="ScheduleServlet">View Schedule</a>
+<%@ include file="footer.jsp" %>
+
+
+
+web.xml
+
+<servlet>
+    <servlet-name>BookSessionServlet</servlet-name>
+    <servlet-class>com.drivesmart.controller.BookSessionServlet</servlet-class>
+</servlet>
+<servlet-mapping>
+    <servlet-name>BookSessionServlet</servlet-name>
+    <url-pattern>/BookSessionServlet</url-pattern>
+</servlet-mapping>
+
+<servlet>
+    <servlet-name>ScheduleServlet</servlet-name>
+    <servlet-class>com.drivesmart.controller.ScheduleServlet</servlet-class
