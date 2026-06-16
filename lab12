@@ -1,0 +1,213 @@
+DATABASE SETUP
+
+CREATE DATABASE drivesmart_db;
+
+USE drivesmart_db;
+
+CREATE TABLE Training_Sessions (
+  session_id INT AUTO_INCREMENT PRIMARY KEY,
+  student_name VARCHAR(100),
+  branch_location VARCHAR(100),
+  lesson_type VARCHAR(50),
+  status VARCHAR(20)
+);
+
+sessionbean.java
+package com.drivesmart.model;
+
+public class SessionBean {
+    private int session_id;
+    private String student_name;
+    private String branch_location;
+    private String lesson_type;
+    private String status;
+
+    public SessionBean() {}
+
+    public SessionBean(int session_id, String student_name, String branch_location, String lesson_type, String status) {
+        this.session_id = session_id;
+        this.student_name = student_name;
+        this.branch_location = branch_location;
+        this.lesson_type = lesson_type;
+        this.status = status;
+    }
+
+    // Getters and Setters
+    public int getSession_id() { return session_id; }
+    public void setSession_id(int session_id) { this.session_id = session_id; }
+
+    public String getStudent_name() { return student_name; }
+    public void setStudent_name(String student_name) { this.student_name = student_name; }
+
+    public String getBranch_location() { return branch_location; }
+    public void setBranch_location(String branch_location) { this.branch_location = branch_location; }
+
+    public String getLesson_type() { return lesson_type; }
+    public void setLesson_type(String lesson_type) { this.lesson_type = lesson_type; }
+
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
+}
+
+
+sessiondao.java
+
+package com.drivesmart.dao;
+
+import java.sql.*;
+import java.util.*;
+import com.drivesmart.model.SessionBean;
+
+public class SessionDAO {
+    private String jdbcURL = "jdbc:mysql://localhost:3306/drivesmart_db";
+    private String jdbcUsername = "root";
+    private String jdbcPassword = "password"; // change to your MySQL password
+
+    private Connection getConnection() throws SQLException {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return DriverManager.getConnection(jdbcURL, jdbcUsername, jdbcPassword);
+    }
+
+    public void bookSession(SessionBean session) {
+        String sql = "INSERT INTO Training_Sessions(student_name, branch_location, lesson_type, status) VALUES (?, ?, ?, ?)";
+        try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, session.getStudent_name());
+            ps.setString(2, session.getBranch_location());
+            ps.setString(3, session.getLesson_type());
+            ps.setString(4, session.getStatus());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public List<SessionBean> getAllSessions() {
+        List<SessionBean> list = new ArrayList<>();
+        String sql = "SELECT * FROM Training_Sessions ORDER BY branch_location ASC";
+        try (Connection conn = getConnection(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                SessionBean s = new SessionBean(
+                    rs.getInt("session_id"),
+                    rs.getString("student_name"),
+                    rs.getString("branch_location"),
+                    rs.getString("lesson_type"),
+                    rs.getString("status")
+                );
+                list.add(s);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+}
+
+
+booksessionservlet.java
+
+package com.drivesmart.controller;
+
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
+import java.io.IOException;
+import com.drivesmart.model.SessionBean;
+import com.drivesmart.dao.SessionDAO;
+
+public class BookSessionServlet extends HttpServlet {
+    private SessionDAO dao = new SessionDAO();
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String student_name = request.getParameter("student_name");
+        String branch_location = request.getParameter("branch_location");
+        String lesson_type = request.getParameter("lesson_type");
+
+        SessionBean session = new SessionBean();
+        session.setStudent_name(student_name);
+        session.setBranch_location(branch_location);
+        session.setLesson_type(lesson_type);
+        session.setStatus("Booked");
+
+        dao.bookSession(session);
+
+        response.sendRedirect("ScheduleServlet");
+    }
+}
+
+
+scheduleservlet.java
+
+package com.drivesmart.controller;
+
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
+import java.io.IOException;
+import java.util.List;
+import com.drivesmart.model.SessionBean;
+import com.drivesmart.dao.SessionDAO;
+
+public class ScheduleServlet extends HttpServlet {
+    private SessionDAO dao = new SessionDAO();
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        List<SessionBean> list = dao.getAllSessions();
+        request.setAttribute("sessionList", list);
+        RequestDispatcher rd = request.getRequestDispatcher("schedule.jsp");
+        rd.forward(request, response);
+    }
+}
+
+
+booksession.jsp
+
+<%@ page language="java" contentType="text/html; charset=UTF-8" %>
+<html>
+<head><title>Book Session</title></head>
+<body>
+<h2>Book a Driving Lesson</h2>
+<form method="POST" action="BookSessionServlet">
+    Student Name: <input type="text" name="student_name" required><br>
+    Branch Location: <input type="text" name="branch_location" required><br>
+    Lesson Type: 
+    <select name="lesson_type">
+        <option>Manual Car</option>
+        <option>Automatic Car</option>
+        <option>Motorcycle</option>
+    </select><br>
+    <input type="submit" value="Book Session">
+</form>
+</body>
+</html>
+
+
+schedule.jsp
+
+<%@ page language="java" contentType="text/html; charset=UTF-8" %>
+<%@ page import="java.util.*, com.drivesmart.model.SessionBean" %>
+<html>
+<head><title>Schedule Dashboard</title></head>
+<body>
+<h2>Centralized Training Schedule</h2>
+<table border="1">
+    <tr>
+        <th>ID</th><th>Student</th><th>Branch</th><th>Lesson Type</th><th>Status</th>
+    </tr>
+    <%
+        List<SessionBean> list = (List<SessionBean>) request.getAttribute("sessionList");
+        for(SessionBean s : list) {
+    %>
+    <tr>
+        <td><%= s.getSession_id() %></td>
+        <td><%= s.getStudent_name() %></td>
+        <td><%= s.getBranch_location() %></td>
+        <td><%= s.getLesson_type() %></td>
+        <td><%= s.getStatus() %></td>
+    </tr>
+    <% } %>
+</table>
+</body>
+</html>
+
